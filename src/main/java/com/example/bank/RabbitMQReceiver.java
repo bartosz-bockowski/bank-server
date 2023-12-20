@@ -14,11 +14,9 @@ public class RabbitMQReceiver {
 
     @RabbitListener(queues = Config.QUEUE_NAME)
     public void receiveMessage(Message message) throws IOException, ClassNotFoundException {
-        CashTransferDTO cashTransferDTO = (CashTransferDTO) (
-                new ObjectInputStream(
-                        new ByteArrayInputStream(message.getBody())
-                ).readObject()
-        );
+        ByteArrayInputStream bis = new ByteArrayInputStream(message.getBody());
+        ObjectInputStream ois = new ObjectInputStream(bis);
+        CashTransferDTO cashTransferDTO = (CashTransferDTO) (ois.readObject());
         System.out.println(cashTransferDTO);
     }
 
